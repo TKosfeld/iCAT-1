@@ -16,20 +16,20 @@ trnStats <- function(listPre, listPost, field) {
   fs <- strsplit(field, ' ')[[1]]
   
   pre <- rbindlist(lapply(listPre, function(x) {
-    dat <- fread(x, select = c(fs, "count (templates)", "copy"))
+    dat <- fread(x, select = c(fs, "count (reads)", "copy"))
   }))
   
   DTpre <- as.data.table(pre)
-  pre <- DTpre[, lapply(.SD, sum), by = fs, .SDcols = "count (templates)"]
-  pref <- c(length(listPre), length(pre$`count (templates)`), sum(pre$`count (templates)`))
+  pre <- DTpre[, lapply(.SD, sum), by = fs, .SDcols = "count (reads)"]
+  pref <- c(length(listPre), length(pre$`count (reads)`), sum(pre$`count (reads)`))
   
   post <- rbindlist(lapply(listPost, function(x) {
-    dat <- fread(x, select = c(fs, "count (templates)"))
+    dat <- fread(x, select = c(fs, "count (reads)"))
   }))
   
   DTpost <- as.data.table(post)
-  post <- DTpost[, lapply(.SD, sum), by = fs, .SDcols = "count (templates)"]
-  postf <- c(length(listPost), length(post$`count (templates)`), sum(post$`count (templates)`))
+  post <- DTpost[, lapply(.SD, sum), by = fs, .SDcols = "count (reads)"]
+  postf <- c(length(listPost), length(post$`count (reads)`), sum(post$`count (reads)`))
   
   both <- rbind(pref, postf)
   colnames(both) <- c("# Samples", "# Clonotypes", "# Unique Sequences")
